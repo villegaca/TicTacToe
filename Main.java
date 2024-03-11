@@ -17,10 +17,19 @@ public class Main {
         //if there is an error, the boolean value remains false
         //if input is valid, then we check to see if the input is 1 or 2
         boolean validInput = false;
-        while (!validInput || opponentChoice < 1 || opponentChoice > 2){
+        while (!validInput && opponentChoice != 1 && opponentChoice != 2){
             try{
                 opponentChoice = scanner.nextInt();
-                validInput = true;
+                if (opponentChoice != 1 && opponentChoice != 2){
+                    System.out.println(wrongInput);
+                    scanner.next();
+                } else {
+                    validInput = true;
+                }
+                //System.out.println();
+                
+                //scanner.next();
+                //validInput = true;
             } catch (InputMismatchException i){
                 System.out.println(wrongInput);
                 scanner.next();

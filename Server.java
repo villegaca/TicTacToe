@@ -7,13 +7,20 @@ public class Server {
 
     String serverStart = "Server Started\nWaiting client\n";
     
-    public Server(int port){
-        try{
-        server = new ServerSocket(port);
-        System.out.println(serverStart);
-        socket = server.accept();
-        } catch (Exception e) {
-            System.out.println(e);
+    public Server(ServerSocket serverSocket){
+        this.server = serverSocket;
+    }
+
+    public void startServer(ServerSocket serverSocket){
+        while (!server.isClosed()){
+            try{
+                socket = server.accept();
+                System.out.println("new client has connected");
+                ClientHandler clientHandler = new ClientHandler(socket);
+                Thread thread = new Thread(clientHandler);
+            } catch (IOException i){
+                
+            }
         }
     }
 }
