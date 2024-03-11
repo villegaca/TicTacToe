@@ -17,7 +17,7 @@ public class Server {
                 socket = server.accept();
                 System.out.println("new client has connected");
                 ClientHandler clientHandler = new ClientHandler(socket);
-                Thread thread = new Thread(clientHandler);
+                clientHandler.start();
             } catch (IOException i){
                 
             }
