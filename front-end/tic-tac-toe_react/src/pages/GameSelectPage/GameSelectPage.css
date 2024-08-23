@@ -1,0 +1,41 @@
+/*.main {
+    background: none;
+    min-height: 100vh;
+    min-width: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+    */
+
+.title {
+    margin-top: -100px;
+}
+
+.hello-text {
+    font-size: 50px;
+    text-align: center;
+    color: aliceblue;
+}
+
+.pick-opponent-text {
+    font-size: 40px;
+    text-align: center;
+    margin-top: 0;
+    color: aliceblue;
+}
+
+.opponent-select-button {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    margin-top: 50px;
+   
+}
+
+.computer-button,
+.human-button {
+    font-size: 30px;
+    padding: 20px 50px 20px 50px;
+    border-radius: 20px;
+}
