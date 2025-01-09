@@ -1,6 +1,8 @@
 import { React, useState } from 'react';
 import LoginTextBox from '../../components/UI/LoginTextBox/LoginTextBox';
+import { useNavigate } from "react-router-dom";
 import './SignUpPage.css';
+import axios from '../../api/AxiosConfig';
 
 function SignUpPage (){
     const signUpMsg = "Sign Up";
@@ -11,6 +13,16 @@ function SignUpPage (){
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
+    const handleSignUp = async () => {
+        try {
+            const response = await axios.post("'http://localhost:8080/signUp'");
+            navigate("/home");
+        }catch(error){
+            console.error("Error Signing In: ", error);
+        }
+    }
 
     return (
         <div className = 'main'>
@@ -50,7 +62,7 @@ function SignUpPage (){
             </div>
 
             <div className='sign-up-button'>
-                <button className='sign-up-button-text'> { signUpMsg} </button>
+                <button className='sign-up-button-text' onClick = { handleSignUp }> { signUpMsg } </button>
             </div>
         </div>
     )
