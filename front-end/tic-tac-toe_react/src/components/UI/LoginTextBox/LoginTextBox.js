@@ -7,9 +7,11 @@ function LoginTextBox(props){
             <form>
                 <input
                     type = {props.type}
+                    name = {props.name}
                     value = {props.value}
                     autoComplete="off"
-                    onChange = {(e) => props.onChange(e.target.value)}
+                    //onChange = {(e) => props.onChange(e.target.value)}
+                    onChange={props.onChange}
                 />
                 <span className = {props.value.length ===0? "": "fill"}> {props.placeHolder}</span>
             </form>

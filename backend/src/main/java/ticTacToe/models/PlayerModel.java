@@ -16,6 +16,7 @@ public class PlayerModel {
     @Id
     private String userName;
 
+    private String email;
     private String password;
     private int wins;
     private int losses;

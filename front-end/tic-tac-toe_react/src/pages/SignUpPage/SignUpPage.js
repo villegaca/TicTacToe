@@ -10,18 +10,34 @@ function SignUpPage (){
     const userNameText = "UserName";
     const emailText = "Email";
     const passwordText = "Password";
-    const [userName, setUserName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [formData, setFormData] = useState({
+        userName: "",
+        email: "",
+        password: "",
+        wins: 0,
+        losses: 0
+    });
+    // const [userName, setUserName] = useState("");
+    // const [email, setEmail] = useState("");
+    // const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
     const handleSignUp = async () => {
         try {
-            const response = await axios.post("'http://localhost:8080/signUp'");
+            const response = await axios.post("'http://localhost:8080/signUp'", formData);
+            console.log('Response: ', response.data);
             navigate("/home");
         }catch(error){
             console.error("Error Signing In: ", error);
         }
+    }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
     }
 
     return (
@@ -34,8 +50,9 @@ function SignUpPage (){
             <div className='input-boxes'>
                 <LoginTextBox
                     type = "text"
-                    value = { userName }
-                    onChange = {setUserName}
+                    name = "userName"
+                    value = { formData.userName }
+                    onChange = {handleInputChange}
                     placeHolder = {userNameText} 
                 >
 
@@ -43,8 +60,9 @@ function SignUpPage (){
 
                 <LoginTextBox
                     type = "text"
-                    value = { email }
-                    onChange = {setEmail}
+                    name = "email"
+                    value = { formData.email }
+                    onChange = {handleInputChange}
                     placeHolder = {emailText} 
                 >
 
@@ -52,8 +70,9 @@ function SignUpPage (){
 
                 <LoginTextBox
                     type = "password"
-                    value = { password }
-                    onChange = {setPassword}
+                    name = "password"
+                    value = { formData.password }
+                    onChange = {handleInputChange}
                     placeHolder = {passwordText} 
                 >
 
