@@ -1,4 +1,4 @@
-package ticTacToe.service;
+package ticTacToe.backend.service;
 
 import java.util.Map;
 
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import ticTacToe.models.PlayerModel;
-import ticTacToe.repository.PlayerRepo;
+import ticTacToe.backend.models.PlayerModel;
+import ticTacToe.backend.repository.PlayerRepo;
 
 @Service
 public class GameService {

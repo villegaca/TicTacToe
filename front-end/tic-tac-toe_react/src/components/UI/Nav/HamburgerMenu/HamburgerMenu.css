@@ -1,0 +1,39 @@
+.menu-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 40px;
+}
+
+.menu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    left: 50%;
+    top: 60px;
+    transform: translateX(-50%);
+    background-color: transparent;
+    box-shadow: none;
+    padding: 10px;
+    border-radius: 8px;
+    gap: 10px;
+    text-align: center;
+    min-width: 200px;
+}
+
+.menu-button {
+    border: none;
+    background-color: #201932;
+    font-size: 20px;
+    color: #2bbef2;
+    margin-bottom: 10px;
+    transition: opacity 0.2s;
+}
+
+.menu-button:hover {
+    opacity: 0.4;
+}
+
+.menu-button:active {
+    opacity: 0.9;
+}
+

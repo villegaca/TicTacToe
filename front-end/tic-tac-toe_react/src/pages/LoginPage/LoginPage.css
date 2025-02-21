@@ -27,6 +27,12 @@
     text-align: center;
 }
 
+.error-message{
+    background-color: rgba(247, 69, 69, 0.369);
+    padding: 20px; 
+    font-size: 16px;
+}
+
 .input-boxes{
     margin-bottom: 25px;
 }
@@ -76,6 +82,11 @@
     color: red;
     background: none;
     border: none;
+    transition: opacity 0.4s;
+}
+
+.sign-up-button:hover{
+    opacity: 0.4;
 }
 
 .sign-up-button:active{

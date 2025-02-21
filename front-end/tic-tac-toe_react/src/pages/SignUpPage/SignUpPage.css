@@ -24,9 +24,14 @@
 
 /* inherited from log in page
 .input-boxes {
-    /*margin-left: 15px; */
+    /*margin-left: 15px; 
 
 */
+/* error-message is inherited from loginpage.css */
+.signup-error-msg{
+    margin-top: -50px;
+    margin-bottom: 20px;
+}
 
 .sign-up-button {
     display: flex;

@@ -1,4 +1,4 @@
-package ticTacToe.models;
+package ticTacToe.backend.models;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,7 +15,6 @@ import lombok.Setter;
 public class PlayerModel {
     @Id
     private String userName;
-
     private String email;
     private String password;
     private int wins;

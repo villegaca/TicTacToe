@@ -17,17 +17,20 @@ function SignUpPage (){
         wins: 0,
         losses: 0
     });
-    // const [userName, setUserName] = useState("");
-    // const [email, setEmail] = useState("");
-    // const [password, setPassword] = useState("");
+    const [accountExists, setAccountExists] = useState(false);
+    const signUpErrorTxt = "Account Already Exists";
     const navigate = useNavigate();
 
     const handleSignUp = async () => {
         try {
-            const response = await axios.post("'http://localhost:8080/signUp'", formData);
+            const response = await axios.post('http://localhost:8080/signup', formData);
             console.log('Response: ', response.data);
+            setAccountExists(false);
             navigate("/home");
         }catch(error){
+            if(error.response.status === 409){
+                setAccountExists(true); 
+            }
             console.error("Error Signing In: ", error);
         }
     }
@@ -79,6 +82,10 @@ function SignUpPage (){
                 </LoginTextBox>
 
             </div>
+
+            {accountExists && 
+                (<div className = 'error-message signup-error-msg'> { accountExists?signUpErrorTxt : ""} </div> 
+            )}
 
             <div className='sign-up-button'>
                 <button className='sign-up-button-text' onClick = { handleSignUp }> { signUpMsg } </button>

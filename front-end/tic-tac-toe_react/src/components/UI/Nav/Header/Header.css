@@ -1,0 +1,38 @@
+.header {
+    margin: 0;
+    margin-top: 50px;
+    /*background-color: #2bbef2;*/ 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.logo-container {
+    flex-grow: 1;
+}
+
+.logo {
+   width: 100px; 
+   height: 100px;
+   margin-top: 10px;
+   border-radius: 30px;
+}
+
+.right-container {
+    background-color: #2bbef2;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 1rem;
+    margin-left: auto;
+    
+}
+
+.about-button {
+    font-size: 30px;
+    background-color: #2bbef2;
+    color: #201932;
+    border: none;
+}

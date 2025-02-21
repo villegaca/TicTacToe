@@ -1,8 +1,8 @@
-package ticTacToe.controller;
+package ticTacToe.backend.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
-import ticTacToe.service.GameService;
+import ticTacToe.backend.service.GameService;
 
 public class StartGameController {
     

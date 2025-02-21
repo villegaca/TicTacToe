@@ -8,8 +8,8 @@
 }
     */
 .main-home{
-    /*background-color: #1f2833;*/
-    background: linear-gradient(to bottom right, rgb(14, 141, 204) 30%, rgb(24, 71, 130) 5%);
+    background-color: #201932;
+    /*background: linear-gradient(to bottom right, rgb(14, 141, 204) 30%, rgb(24, 71, 130) 5%);*/
     min-width: 100vw;
     min-height: 100vh;
 }
@@ -23,7 +23,8 @@
 
 .hello-text {
     font-size: 50px;
-    color: aliceblue;
+    /*color: aliceblue;*/
+    color: #2bbef2
 }
 
 .win-loss-container {
@@ -93,11 +94,21 @@
     
 }
 
-.play-game {
+.play-game-button {
     margin-bottom: 20px;
-    padding: 20px 50px 20px 50px;
+    padding: 20px 70px 20px 70px;
     border-radius: 20px;
-    font-size: 20px;
+    font-size: 30px;
+    background-color:#2bbef2;
+    color:#201932;
+}
+
+.play-game-button:hover {
+    opacity: 0.7;
+}
+
+.play-game-button:active {
+    opacity: 0.9;
 }
 
 /* .practice {

@@ -1,5 +1,6 @@
 import {React, useState, useEffect } from 'react';
 import './HomePage.css';
+import Header from "../../components/UI/Nav/Header/Header";
 import { useNavigate } from 'react-router-dom';
 import axios from "../../api/AxiosConfig";
 
@@ -33,6 +34,7 @@ function HomePage (){
 
     return (
         <div className='main-home'>
+            <Header/>
             <div className='title'>
                 <p className='hello-text'> { helloText + playerName} </p>
                 {/* <p className='pick-opponent-text'> { pickOpponentTxt }</p> */}
@@ -61,7 +63,7 @@ function HomePage (){
             
 
             <div className='opponent-select-button'>
-                <button className='play-game' onClick = {() => navigate('/gamePage')}> { playGameTxt }</button>
+                <button className='play-game-button' onClick = {() => navigate('/gamePage')}> { playGameTxt }</button>
                 {/*<button className='practice' onClick= {() => navigate('/gamePage')}> { practiceTxt }</button>*/}
             </div>
         </div>
