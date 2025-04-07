@@ -8,28 +8,54 @@ import axios from 'axios';
 const ChangeUsernamePage = () => {
     const triggerPasswordStep = "enterPassword";
     const triggerUsernameStep = "enterUsername";
+    const errorMsg = "Wrong credentials.  Please try again.";
+    const accountExists = "That username already exists. Please try again.";
     const [password, setPassword] = useState("");
     const [userName, setUserName] = useState("");
     const [step, setStep] = useState(triggerPasswordStep);
+    const [error401, setError401] = useState(false);
+    const [error409, setError409] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
     const navigate = useNavigate();
 
-    const handlePasswordSubmit = () => {
+    const handlePasswordSubmit = async () => {
         try {
-            if(password === "blah"){
-                setStep(triggerUsernameStep);
-            }
+            const response = await axios.post('http://localhost:8080/verifyPassword', password);
+            console.log('Response: ', response.data);
+
+            setStep(triggerUsernameStep);
+            setError401(false);
+            // if(password === "blah"){
+            //     setStep(triggerUsernameStep);
+            // }
             //const response = axios.post('')
         } catch(error){
+            setError401(true);
             console.log(error);
         }
     }
 
-    const handleUsernameSubmit = () => {
+    const handleUsernameSubmit = async () => {
         //come back and make an update request
-        if(userName === "123"){
+        try {
+            const response = await axios.post('http://localhost:8080/changeUsername', userName);
             setStep(triggerPasswordStep);
-            navigate("/home");
+            setError409(false);
+            setSuccessMsg("UserName has been changed. Going back to the home screen");
+
+            setTimeout(() => {
+                navigate("/home");
+                setSuccessMsg("");
+            }, 5000);
+            //navigate("/home");
+            // if(userName === "123"){
+            //     setStep(triggerPasswordStep);
+            //     navigate("/home");
+            // }
+        }catch(error){
+            setError409(true);
         }
+        
     }
 
     const handlePasswordInput = (event)=>{
@@ -54,6 +80,7 @@ const ChangeUsernamePage = () => {
                     /*transition={{duration: 0.5}}*/
                 >
                 <h1>Enter Your Password</h1>
+                <div className="error-message">{ error401 ? errorMsg : ""}</div>
                 <LoginTextBox
                     type = "password"
                     name = "password"
@@ -75,6 +102,8 @@ const ChangeUsernamePage = () => {
                 >
                 
                 <h1>Enter Your New UserName</h1>
+                <div className="error-message">{ error409 ? accountExists : ""}</div>
+                {successMsg && <div className='success-msg'>{successMsg}</div>}
                 <LoginTextBox
                     type = "text"
                     name = "userName"

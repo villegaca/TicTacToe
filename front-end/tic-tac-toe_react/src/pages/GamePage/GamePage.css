@@ -1,3 +1,17 @@
 .gamePage{
     background-color: #282c34;
 }
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 10px;
+}
+
+.cell {
+    font-size: 40px;
+    text-align: center;
+    cursor: pointer;
+    background-color: aqua;
+}
