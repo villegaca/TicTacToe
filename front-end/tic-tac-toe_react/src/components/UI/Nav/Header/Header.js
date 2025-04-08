@@ -24,6 +24,7 @@ const Header = () => {
             </div>
 
             <div className='right-container'>
+                
                 <div className= "about">
                     <button className= "about-button" onClick={toggleMenu}> About </button>
                     {menuOpen && (
@@ -32,6 +33,7 @@ const Header = () => {
                         </div>
                     )}
                 </div>
+                
                 <div className='hamburger-menu-container'>
                     <HamburgerMenu/>
                 </div>

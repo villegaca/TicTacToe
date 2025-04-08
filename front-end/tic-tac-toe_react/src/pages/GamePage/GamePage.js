@@ -1,4 +1,4 @@
-import {React, useState, useEffect } from 'react';
+import {React, useState, useEffect, useRef } from 'react';
 import SquareButton from '../../components/UI/SquareButton/SquareButton';
 import './GamePage.css';
 import axios from "../../api/AxiosConfig";
@@ -21,13 +21,19 @@ function GamePage(){
     const randomIndex = Math.floor(Math.random() * marks.length);
     const playerFirstMsg = "You Go First!";
     const computerFirstMsg = "You Go Second";
+    //useRef to stop useEffect from running twice
+    const initialized = useRef(false);
 
     // assign X and O to players
     function assignMark(){
         //const marks = ["X", "O"];
-        //const randomIndex = Math.floor(Math.random() * marks.length);
+        const randomIndex = Math.floor(Math.random() * marks.length);
+        const computerIndex = 1 - randomIndex;
+
+        //const chosenPlayerMark = marks[Math.floor(Math.random() * marks.length)];
+        //const chosenComputerMark = 1 - chosenPlayerMark;
         const chosenPlayerMark = marks[randomIndex];
-        const chosenComputerMark = marks[1 - randomIndex];
+        const chosenComputerMark = marks[computerIndex];
 
         setPlayerMark(chosenPlayerMark);
         setComputerMark(chosenComputerMark);
@@ -46,21 +52,15 @@ function GamePage(){
     //***********MUST ADD THIS TO A MSG IN RETURN SO THE PLAYER CAN SEE THIS MESSAGE */
     //***********also must figure out a way to allow either player to go first based on who goes first */
     function whoGoesFirst(){
+        const randomIndex = Math.floor(Math.random() * marks.length);
         const firstPlayer = marks[randomIndex];
         setCurrentPlayer(firstPlayer);
-        console.log("starting player: ", currentPlayer);
+        console.log("starting player: ", firstPlayer);
 
-        if(currentPlayer === computerMark){
+        if(firstPlayer === computerMark){
             botFirstMove();
             console.log(computerFirstMsg);
         }
-
-        // if(currentPlayer === computerMark){
-        //     console.log(playerFirstMsg);
-        // } else {
-        //     botFirstMove();
-        //     console.log(computerFirstMsg);
-        // }
     };
 
     const handleClick = async (index) => {
@@ -79,9 +79,14 @@ function GamePage(){
             const computerMove = response.data.computerMove;
 
             if (computerMove !== -1){
-                newBoard[computerMove] = computerMark;
-                setBoard(newBoard);
-                //setCurrentPlayer(playerMark);
+                const botBoard = [...newBoard];
+                botBoard[computerMove] = computerMark;
+                setTimeout(() => {
+                    setBoard(botBoard);
+                }, 300);
+                //newBoard[computerMove] = computerMark;
+                //setBoard(newBoard);
+                
             }
         }catch(error){
             console.error("error fetching computer move: ", error)
@@ -106,11 +111,29 @@ function GamePage(){
             console.error("error fetching computer move: ", error)
         }
     };
-    // calls the functions that determine the marks and who goes first
+    //calls the functions that determine the marks and who goes first
     // useEffect(() => {
-    //     assignMark();
-    //     whoGoesFirst();
+    //     if(!initialized.current){
+    //         assignMark();
+    //         whoGoesFirst();
+    //         initialized.current = true;
+    //     }
+        
     // }, []);
+
+    useEffect(() => {
+        if(!initialized.current){
+            assignMark();
+            initialized.current = true;
+        }
+        
+    }, []);
+
+    useEffect(() => {
+        if (computerMark && playerMark) {
+            whoGoesFirst();
+        }
+    }, [computerMark, playerMark])
 
     // useEffect(() => {
     //     // Assign random marks
