@@ -17,36 +17,38 @@ function GamePage(){
     const [playerMark, setPlayerMark] = useState("");
     const [computerMark, setComputerMark] = useState("");
     const [currentPlayer, setCurrentPlayer] = useState(" ");
+    const [beforeGameMsg, setBeforeGameMsg] = useState("");
     const marks = ["X", "O"];
     const randomIndex = Math.floor(Math.random() * marks.length);
     const playerFirstMsg = "You Go First!";
     const computerFirstMsg = "You Go Second";
     //useRef to stop useEffect from running twice
     const initialized = useRef(false);
+    const [msgVisible, setMsgVisible] = useState(false);
+    const [marksAssigned, setMarksAssigned] = useState(false);
+
 
     // assign X and O to players
     function assignMark(){
-        //const marks = ["X", "O"];
         const randomIndex = Math.floor(Math.random() * marks.length);
         const computerIndex = 1 - randomIndex;
 
-        //const chosenPlayerMark = marks[Math.floor(Math.random() * marks.length)];
-        //const chosenComputerMark = 1 - chosenPlayerMark;
         const chosenPlayerMark = marks[randomIndex];
         const chosenComputerMark = marks[computerIndex];
 
         setPlayerMark(chosenPlayerMark);
         setComputerMark(chosenComputerMark);
 
-        console.log("Player mark:", chosenPlayerMark);  // Log to check player mark
-        console.log("Computer mark:", chosenComputerMark);  // Log to check computer mark
-        // setPlayerMark(marks[randomIndex]);
+        showMessage(`You are ${chosenPlayerMark}`, () => {
+            setMarksAssigned(true);
+        }, 3000);
 
-        // if(playerMark === marks[0]){
-        //     setComputerMark(marks[1]);
-        // } else {
-        //     setComputerMark(marks[0]);
-        // }
+        //console.log("Player mark:", chosenPlayerMark);  // Log to check player mark
+        //console.log("Computer mark:", chosenComputerMark);  // Log to check computer mark
+
+        // setTimeout(() => {
+        //     whoGoesFirst();
+        // }, 3500);
     };
 
     //***********MUST ADD THIS TO A MSG IN RETURN SO THE PLAYER CAN SEE THIS MESSAGE */
@@ -58,8 +60,11 @@ function GamePage(){
         console.log("starting player: ", firstPlayer);
 
         if(firstPlayer === computerMark){
+            showMessage(computerFirstMsg);
             botFirstMove();
             console.log(computerFirstMsg);
+        }else {
+            showMessage(playerFirstMsg);
         }
     };
 
@@ -83,10 +88,7 @@ function GamePage(){
                 botBoard[computerMove] = computerMark;
                 setTimeout(() => {
                     setBoard(botBoard);
-                }, 300);
-                //newBoard[computerMove] = computerMark;
-                //setBoard(newBoard);
-                
+                }, 300);    
             }
         }catch(error){
             console.error("error fetching computer move: ", error)
@@ -95,7 +97,7 @@ function GamePage(){
 
     const botFirstMove = async () => {
         console.log("Bot making first move...");
-        //const charBoard = initialBoard.map(cell => cell === "" ? ' ' : cell);
+
         try {
             const emptyBoard = Array(9).fill("");
             const response = await axios.post('http://localhost:8080/calculateMove', {board: emptyBoard});
@@ -105,21 +107,27 @@ function GamePage(){
                 const newBoard = [...emptyBoard];
                 newBoard[computerMove] = computerMark;
                 setBoard(newBoard);
-                //setCurrentPlayer(playerMark);
             }
         }catch(error){
             console.error("error fetching computer move: ", error)
         }
     };
-    //calls the functions that determine the marks and who goes first
-    // useEffect(() => {
-    //     if(!initialized.current){
-    //         assignMark();
-    //         whoGoesFirst();
-    //         initialized.current = true;
-    //     }
-        
-    // }, []);
+
+    const showMessage = (text, onComplete, duration = 3000) => {
+        setBeforeGameMsg(text);
+        setMsgVisible(true);
+
+        setTimeout(() => {
+            setMsgVisible(false);
+
+            setTimeout(() => {
+                setBeforeGameMsg("");
+                if (typeof onComplete === 'function'){
+                    onComplete();
+                } 
+            }, 500);
+        }, duration);
+    };
 
     useEffect(() => {
         if(!initialized.current){
@@ -128,41 +136,13 @@ function GamePage(){
         }
         
     }, []);
-
+    
     useEffect(() => {
-        if (computerMark && playerMark) {
+        if (marksAssigned && computerMark && playerMark) {
             whoGoesFirst();
         }
-    }, [computerMark, playerMark])
-
-    // useEffect(() => {
-    //     // Assign random marks
-    //     assignMark();
-    //     // const marks = ["X", "O"];
-    //     // const randomIndex = Math.floor(Math.random() * marks.length);
-    //     // const chosenPlayerMark = marks[randomIndex];
-    //     // const chosenComputerMark = marks[1 - randomIndex];
-
-    //     // setPlayerMark(chosenPlayerMark);
-    //     // setComputerMark(chosenComputerMark);
-    //     // setCurrentPlayer(marks[randomIndex]);
-
-    //     // console.log("Player mark:", chosenPlayerMark);  // Log to check player mark
-    //     // console.log("Computer mark:", chosenComputerMark);  // Log to check computer mark
-    // }, []);
-
-    // After setting marks, decide who goes first
-    // useEffect(() => {
-    //     setCurrentPlayer(marks[randomIndex]);
-
-    //     if (playerMark && computerMark && currentPlayer) {
-    //         console.log("Current Player:", currentPlayer);  // Log to check current player
-    //         if (currentPlayer === computerMark) {
-    //             console.log("Bot going first, calling botFirstMove...");
-    //             botFirstMove();  // Pass a copy of the board
-    //         }
-    //     }
-    // }, [playerMark, computerMark, currentPlayer]);
+    }, [marksAssigned, computerMark, playerMark]);
+    
 
     const startGame = () => {
         assignMark(); // Assign marks to player and computer
@@ -170,18 +150,41 @@ function GamePage(){
     };
 
     return (
-        <div className='board'>
-            {board.map((cell, index) => (
-                <input
-                    key= {index}
-                    type= "text"
-                    value= {cell}
-                    readOnly
-                    onClick= {()=> handleClick(index)}
-                    className= "cell"
-                />
-            ))}
-            <button onClick={startGame}>Start Game</button>
+        <div className='gamePage'>
+            <div className='game-container'>
+                <div className='before-game-container'>
+                    <div className={`before-start-messages ${msgVisible ? 'show' : ''}`}>
+                        {beforeGameMsg}
+                    </div>
+                    {/*<div className={`before-start-messages ${beforeGameMsg ? 'show' : ''}`}>
+                        {beforeGameMsg && <span>{beforeGameMsg}</span>}
+                    </div>
+                    
+                    {/*
+                    <div className='before-game-container'>
+                        {beforeGameMsg && <div className='before-start-messages'>{beforeGameMsg}</div>}
+                    </div>
+                    */}
+                    
+                </div>
+                
+                <div className='board'>
+                    {board.map((cell, index) => (
+                        <input
+                            key= {index}
+                            type= "text"
+                            value= {cell}
+                            readOnly
+                            onClick= {()=> handleClick(index)}
+                            className= "cell"
+                        />
+                    ))}
+                </div>
+
+                <div className='start-game-button-container'>
+                    <button className = 'start-game-button' onClick={startGame}>Start Game</button>
+                </div>
+            </div>
         </div>
         /*
         <div className='gamePage'>
