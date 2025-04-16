@@ -26,6 +26,9 @@ function GamePage(){
     const initialized = useRef(false);
     const [msgVisible, setMsgVisible] = useState(false);
     const [marksAssigned, setMarksAssigned] = useState(false);
+    const [isComputerFirst, setIsComputerFirst] = useState(false);
+    const [didGameStart, setDidGameStart] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
 
 
     // assign X and O to players
@@ -42,13 +45,6 @@ function GamePage(){
         showMessage(`You are ${chosenPlayerMark}`, () => {
             setMarksAssigned(true);
         }, 3000);
-
-        //console.log("Player mark:", chosenPlayerMark);  // Log to check player mark
-        //console.log("Computer mark:", chosenComputerMark);  // Log to check computer mark
-
-        // setTimeout(() => {
-        //     whoGoesFirst();
-        // }, 3500);
     };
 
     //***********MUST ADD THIS TO A MSG IN RETURN SO THE PLAYER CAN SEE THIS MESSAGE */
@@ -61,7 +57,7 @@ function GamePage(){
 
         if(firstPlayer === computerMark){
             showMessage(computerFirstMsg);
-            botFirstMove();
+            setIsComputerFirst(true);
             console.log(computerFirstMsg);
         }else {
             showMessage(playerFirstMsg);
@@ -69,13 +65,20 @@ function GamePage(){
     };
 
     const handleClick = async (index) => {
-        if(board[index] !== ""){
+        if(board[index] !== "" || !didGameStart || gameOver){
             return;
         }
 
         const newBoard = [...board];
         newBoard[index] = playerMark;
         setBoard(newBoard);
+        
+        const winner = checkForWin(newBoard);
+        if(winner){
+            setGameOver(true);
+            return;
+        }
+
         setCurrentPlayer(computerMark);
 
         try {
@@ -86,6 +89,14 @@ function GamePage(){
             if (computerMove !== -1){
                 const botBoard = [...newBoard];
                 botBoard[computerMove] = computerMark;
+
+                const botWinner = checkForWin(botBoard);
+                if(botWinner){
+                    setGameOver(true);
+                    setBoard(botBoard);
+                    return;
+                }
+
                 setTimeout(() => {
                     setBoard(botBoard);
                 }, 300);    
@@ -106,11 +117,41 @@ function GamePage(){
             if (computerMove !== -1){
                 const newBoard = [...emptyBoard];
                 newBoard[computerMove] = computerMark;
+
+                const botWinner = checkForWin(newBoard);
+                if (botWinner) {
+                    setGameOver(true);
+                    showMessage(`${botWinner} wins!`);
+                    setBoard(newBoard);
+                    return; // End the game
+                }
+
                 setBoard(newBoard);
             }
         }catch(error){
             console.error("error fetching computer move: ", error)
         }
+    };
+
+    const checkForWin = (board) => {
+        const winningCombination = [
+            [0, 1, 2], // row 1
+            [3, 4, 5], // row 2
+            [6, 7, 8], // row 3
+            [0, 3, 6], // column 1
+            [1, 4, 7], // column 2
+            [2, 5, 8], // column 3
+            [0, 4, 8], // diagonal 1
+            [2, 4, 6], // diagonal 2
+        ];
+
+        for(let combination of winningCombination){
+            const [a, b, c] = combination;
+            if(board[a] !== "" && board[a] === board[b] && board[b] === board[c]){
+                return board[a];
+            }
+        }
+        return null;
     };
 
     const showMessage = (text, onComplete, duration = 3000) => {
@@ -145,8 +186,10 @@ function GamePage(){
     
 
     const startGame = () => {
-        assignMark(); // Assign marks to player and computer
-        whoGoesFirst(); // Decide who goes first and update the state accordingly
+        setDidGameStart(true);
+        if(isComputerFirst){
+            botFirstMove();
+        }
     };
 
     return (
