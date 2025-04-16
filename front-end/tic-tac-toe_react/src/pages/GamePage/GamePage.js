@@ -29,6 +29,8 @@ function GamePage(){
     const [isComputerFirst, setIsComputerFirst] = useState(false);
     const [didGameStart, setDidGameStart] = useState(false);
     const [gameOver, setGameOver] = useState(false);
+    const [winningCombo, setWinningCombo] = useState(null);
+    const [showLine, setShowLine] = useState(false);
 
 
     // assign X and O to players
@@ -76,6 +78,7 @@ function GamePage(){
         const winner = checkForWin(newBoard);
         if(winner){
             setGameOver(true);
+            setWinningCombo(winner.combination);
             return;
         }
 
@@ -93,6 +96,7 @@ function GamePage(){
                 const botWinner = checkForWin(botBoard);
                 if(botWinner){
                     setGameOver(true);
+                    setWinningCombo(botWinner.combination);
                     setBoard(botBoard);
                     return;
                 }
@@ -121,6 +125,7 @@ function GamePage(){
                 const botWinner = checkForWin(newBoard);
                 if (botWinner) {
                     setGameOver(true);
+                    setWinningCombo(botWinner.combination);
                     showMessage(`${botWinner} wins!`);
                     setBoard(newBoard);
                     return; // End the game
@@ -148,7 +153,7 @@ function GamePage(){
         for(let combination of winningCombination){
             const [a, b, c] = combination;
             if(board[a] !== "" && board[a] === board[b] && board[b] === board[c]){
-                return board[a];
+                return { winner: board[a], combination };
             }
         }
         return null;
@@ -183,6 +188,14 @@ function GamePage(){
             whoGoesFirst();
         }
     }, [marksAssigned, computerMark, playerMark]);
+
+    useEffect(() => {
+        if(winningCombo){
+            setTimeout(() => {
+                setShowLine(true);
+            }, 50)
+        }
+    }, [winningCombo]);
     
 
     const startGame = () => {
@@ -222,6 +235,10 @@ function GamePage(){
                             className= "cell"
                         />
                     ))}
+
+                    {winningCombo && ( 
+                        <div className = {`win-line win-line-${winningCombo.join("-")} ${showLine ? "show" : ""}`}/>
+                    )}
                 </div>
 
                 <div className='start-game-button-container'>

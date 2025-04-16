@@ -20,20 +20,12 @@
     align-items: center;
     justify-content: center;
 }
-.before-start-messages {
-    
+
+.before-start-messages { 
     color: aqua;
     font-size: 60px;
     opacity: 0;
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-    
-    /*
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    */
-    
-      
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;     
 }
 
 .before-start-messages.show {
@@ -42,6 +34,7 @@
 }
 
 .board {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
@@ -68,3 +61,111 @@
     cursor: pointer;
     border-radius: 50px;
 }
+
+.win-line {
+    position: absolute;
+    height: 4px;
+    background: red;
+    z-index: 5;
+    transform: scaleX(0);
+    transform-origin: top;
+    transition: transform 2s ease-out;
+}
+
+/* Horizontal rows */
+.win-line-0-1-2 {
+    top: 50px;     /* Center of first row */
+    left: 0;
+    width: 320px;  /* 3 cells + 2 gaps: 3x100 + 2x10 */
+    height: 4px;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  
+  .win-line-3-4-5 {
+    top: 160px;    /* Center of second row */
+    left: 0;
+    width: 320px;
+    height: 4px;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  
+  .win-line-6-7-8 {
+    top: 270px;    /* Center of third row */
+    left: 0;
+    width: 320px;
+    height: 4px;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+.win-line-0-1-2.show,
+.win-line-3-4-5.show,
+.win-line-6-7-8.show {
+  transform: scaleX(1);
+}
+
+/* Vertical columns */
+.win-line-0-3-6 {
+  width: 4px;
+  height: 100%;
+  top: 0;
+  left: 50px;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.win-line-1-4-7 {
+    width: 4px;
+    height: 100%;
+    top: 0;
+    left: 160px;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+.win-line-2-5-8 {
+    width: 4px;
+    height: 100%;
+    top: 0;
+    left: 270px;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+.win-line-0-3-6.show,
+.win-line-1-4-7.show,
+.win-line-2-5-8.show {
+  transform: scaleY(1);
+}
+
+/* Diagonals */
+.win-line-0-4-8 {
+    position: absolute;
+    width: 448px;
+    height: 4px;
+    top: 0px;
+    left: 2px;  
+    transform: rotate(45deg) scaleX(0);
+    transform-origin: left;
+}
+
+.win-line-2-4-6 {
+    position: absolute;
+    width: 448px;
+    height: 4px;
+    top: 0px;
+    left: -129px;
+    transform: rotate(-45deg) scaleX(0);
+    transform-origin: right;
+}
+
+.win-line-0-4-8.show {
+    transform: rotate(45deg) scaleX(1);
+}
+
+.win-line-2-4-6.show {
+    transform: rotate(-45deg) scaleX(1);
+}
+
