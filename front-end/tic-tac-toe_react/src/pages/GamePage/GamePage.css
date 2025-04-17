@@ -169,3 +169,13 @@
     transform: rotate(-45deg) scaleX(1);
 }
 
+.game-result-message {
+    position: absolute;
+    top: 150px;
+    color: #fff;
+    font-size: 60px;
+    margin-top: 40px;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out forwards;
+}
+

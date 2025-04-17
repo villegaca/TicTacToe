@@ -31,6 +31,9 @@ function GamePage(){
     const [gameOver, setGameOver] = useState(false);
     const [winningCombo, setWinningCombo] = useState(null);
     const [showLine, setShowLine] = useState(false);
+    const [winner, setWinner] = useState(null);
+    const [isTie, setIsTie] = useState(false);
+    const [showStartButton, setShowStartButton] = useState(false);
 
 
     // assign X and O to players
@@ -66,6 +69,10 @@ function GamePage(){
         }
     };
 
+    const isBoardFull = (board) => {
+        return board.every(cell => cell !== "");
+    };
+
     const handleClick = async (index) => {
         if(board[index] !== "" || !didGameStart || gameOver){
             return;
@@ -78,7 +85,14 @@ function GamePage(){
         const winner = checkForWin(newBoard);
         if(winner){
             setGameOver(true);
+            setWinner(winner);
             setWinningCombo(winner.combination);
+            return;
+        }
+
+        if (isBoardFull(newBoard)) {
+            setIsTie(true);
+            setGameOver(true);
             return;
         }
 
@@ -96,7 +110,15 @@ function GamePage(){
                 const botWinner = checkForWin(botBoard);
                 if(botWinner){
                     setGameOver(true);
+                    setWinner(botWinner);
                     setWinningCombo(botWinner.combination);
+                    setBoard(botBoard);
+                    return;
+                }
+
+                if (isBoardFull(botBoard)) {
+                    setIsTie(true);
+                    setGameOver(true);
                     setBoard(botBoard);
                     return;
                 }
@@ -125,10 +147,18 @@ function GamePage(){
                 const botWinner = checkForWin(newBoard);
                 if (botWinner) {
                     setGameOver(true);
+                    setWinner(botWinner);
                     setWinningCombo(botWinner.combination);
                     showMessage(`${botWinner} wins!`);
                     setBoard(newBoard);
                     return; // End the game
+                }
+
+                if (isBoardFull(newBoard)) {
+                    setIsTie(true);
+                    setGameOver(true);
+                    setBoard(newBoard);
+                    return;
                 }
 
                 setBoard(newBoard);
@@ -186,6 +216,11 @@ function GamePage(){
     useEffect(() => {
         if (marksAssigned && computerMark && playerMark) {
             whoGoesFirst();
+
+            setTimeout (() => {
+                setShowStartButton(true);
+            }, 3500);
+            
         }
     }, [marksAssigned, computerMark, playerMark]);
 
@@ -208,6 +243,16 @@ function GamePage(){
     return (
         <div className='gamePage'>
             <div className='game-container'>
+                {gameOver && (
+                    <div className='game-result-message'>
+                        {isTie 
+                            ? "It's A Tie"
+                            : winner?.winner === playerMark 
+                                ? "You Won!" 
+                                : "You Lost"}
+                    </div>
+                )}
+
                 <div className='before-game-container'>
                     <div className={`before-start-messages ${msgVisible ? 'show' : ''}`}>
                         {beforeGameMsg}
@@ -241,9 +286,12 @@ function GamePage(){
                     )}
                 </div>
 
-                <div className='start-game-button-container'>
-                    <button className = 'start-game-button' onClick={startGame}>Start Game</button>
-                </div>
+                {showStartButton && !didGameStart &&(
+                    <div className='start-game-button-container'>
+                        <button className = 'start-game-button' onClick={startGame}>Start Game</button>
+                    </div>
+                )}
+
             </div>
         </div>
         /*
