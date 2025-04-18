@@ -240,8 +240,23 @@ function GamePage(){
         }
     };
 
-    const playAgain = () => {
-        
+    const resetGame = () => {
+        setBoard(Array(9).fill(""));
+        setGameOver(false);
+        setWinner(null);
+        setWinningCombo(null);
+        setIsTie(false);
+        setDidGameStart(false);
+        setMarksAssigned(false);
+        setShowLine(false);
+        setShowStartButton(false);
+        setBeforeGameMsg("");
+        setMsgVisible(false);
+        setIsComputerFirst(false);
+        setCurrentPlayer(null);
+    
+        initialized.current = false; // allow useEffect to run assignMark again
+        assignMark();
     };
 
     return (
@@ -298,7 +313,7 @@ function GamePage(){
 
                 {gameOver && (
                     <div className='play-again-button-container'>
-                        <button className='play-again-button' onClick = {playAgain}>Play Again</button>
+                        <button className='play-again-button' onClick = {resetGame}>Play Again</button>
                     </div>
                 )}
 
