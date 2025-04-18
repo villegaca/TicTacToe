@@ -69,6 +69,35 @@ function GamePage(){
         }
     };
 
+    const recordResult = async (winner) => {
+        let endPoint = "";
+        if(winner === playerMark){
+            endPoint = 'http://localhost:8080/addWin';
+        } else {
+            endPoint = 'http://localhost:8080/addLoss';
+        }
+
+        try {
+            await axios.post(endPoint);
+        }catch(error){
+                console.error("error fetching computer move: ", error)
+            }
+        // if(winner === playerMark){
+        //     try{
+        //         await axios.post('http://localhost:8080/addWin');
+        //     }catch(error){
+        //         console.error("error fetching computer move: ", error)
+        //     } 
+        // } else {
+        //     try{
+        //         await axios.post('http://localhost:8080/addLoss');
+        //     }catch(error){
+        //         console.error("error fetching computer move: ", error)
+        //     } 
+            
+        // }
+    }
+
     const isBoardFull = (board) => {
         return board.every(cell => cell !== "");
     };
@@ -87,6 +116,7 @@ function GamePage(){
             setGameOver(true);
             setWinner(winner);
             setWinningCombo(winner.combination);
+            //recordResult(winner);
             return;
         }
 
@@ -113,6 +143,7 @@ function GamePage(){
                     setWinner(botWinner);
                     setWinningCombo(botWinner.combination);
                     setBoard(botBoard);
+                    //recordResult(botWinner);
                     return;
                 }
 
@@ -151,6 +182,7 @@ function GamePage(){
                     setWinningCombo(botWinner.combination);
                     showMessage(`${botWinner} wins!`);
                     setBoard(newBoard);
+                    //recordResult(botWinner);
                     return; // End the game
                 }
 
