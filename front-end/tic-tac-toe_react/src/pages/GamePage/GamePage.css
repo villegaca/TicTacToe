@@ -48,13 +48,15 @@
     background-color: aqua;
 }
 
-.start-game-button-container{
+.start-game-button-container,
+.play-again-button-container{
     width: 320px;
     text-align: center;
     margin-top: 100px;
 }
 
-.start-game-button {
+.start-game-button,
+.play-again-button {
     width: 100%;
     padding: 20px;
     font-size: 20px;
@@ -62,11 +64,13 @@
     border-radius: 50px;
 }
 
-.start-game-button:hover {
+.start-game-button:hover,
+.play-again-button:hover {
     opacity: 0.7;
 }
 
-.start-game-button:active {
+.start-game-button:active,
+.play-again-button:active {
     opacity: 0.9;
 }
 

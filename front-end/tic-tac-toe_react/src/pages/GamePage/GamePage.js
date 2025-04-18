@@ -240,6 +240,10 @@ function GamePage(){
         }
     };
 
+    const playAgain = () => {
+        
+    };
+
     return (
         <div className='gamePage'>
             <div className='game-container'>
@@ -289,6 +293,12 @@ function GamePage(){
                 {showStartButton && !didGameStart &&(
                     <div className='start-game-button-container'>
                         <button className = 'start-game-button' onClick={startGame}>Start Game</button>
+                    </div>
+                )}
+
+                {gameOver && (
+                    <div className='play-again-button-container'>
+                        <button className='play-again-button' onClick = {playAgain}>Play Again</button>
                     </div>
                 )}
 
