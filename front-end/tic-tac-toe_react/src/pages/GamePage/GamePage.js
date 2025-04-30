@@ -1,7 +1,8 @@
 import {React, useState, useEffect, useRef } from 'react';
 import SquareButton from '../../components/UI/SquareButton/SquareButton';
 import './GamePage.css';
-import axios from "../../api/AxiosConfig";
+import axiosInstance from "../../api/AxiosConfig";
+import { postLossCall, postWinCall, calculateMoveCall } from '../../api/UserServiceFunctions';
 
 /*
 set player to their symbol randomly
@@ -70,18 +71,51 @@ function GamePage(){
     };
 
     const recordResult = async (winner) => {
-        let endPoint = "";
-        if(winner === playerMark){
-            endPoint = 'http://localhost:8080/addWin';
-        } else {
-            endPoint = 'http://localhost:8080/addLoss';
+        console.log("recordResult called with winner:", winner);
+        let getWinner = winner?.winner;
+        try {
+            switch(getWinner){
+                case playerMark:
+                    console.log("recordResult called with winner:", winner);
+                    await postWinCall();
+                    break;
+                case computerMark:
+                    console.log("recordResult called with winner:", winner);
+                    await postLossCall();
+                    break;
+                default:
+                    console.log("No valid winner detected.");
+                    console.log("winner: " + winner);
+                    break;      
+            }
+
+            // if (winner === playerMark) {
+            //     console.log("Winner is player, posting win.");
+            //     await postWinCall();
+            // } else if (winner === computerMark) {
+            //     console.log("Winner is computer, posting loss.");
+            //     await postLossCall();
+            // } else {
+            //     console.log("No valid winner detected.");
+            // }
+        } catch (error) {
+            console.error("error recording stat", error);
         }
 
-        try {
-            await axios.post(endPoint);
-        }catch(error){
-                console.error("error fetching computer move: ", error)
-            }
+        // let endPoint = "";
+        // if(winner === playerMark){
+        //     endPoint = 'http://localhost:8080/addWin';
+        // } else {
+        //     endPoint = 'http://localhost:8080/addLoss';
+        // }
+
+        // try {
+        //     await axios.post(endPoint);
+        // }catch(error){
+        //         console.error("error fetching computer move: ", error)
+        //     }
+
+
         // if(winner === playerMark){
         //     try{
         //         await axios.post('http://localhost:8080/addWin');
@@ -96,7 +130,7 @@ function GamePage(){
         //     } 
             
         // }
-    }
+    };
 
     const isBoardFull = (board) => {
         return board.every(cell => cell !== "");
@@ -116,7 +150,7 @@ function GamePage(){
             setGameOver(true);
             setWinner(winner);
             setWinningCombo(winner.combination);
-            //recordResult(winner);
+            await recordResult(winner);
             return;
         }
 
@@ -130,7 +164,8 @@ function GamePage(){
 
         try {
             const charBoard = newBoard.map(cell => cell === "" ? ' ' : cell);
-            const response = await axios.post('http://localhost:8080/calculateMove', {board: charBoard});
+            const response = await axiosInstance.post('http://localhost:8080/calculateMove', {board: charBoard});
+            //const response = await calculateMoveCall({ board: charBoard });
             const computerMove = response.data.computerMove;
 
             if (computerMove !== -1){
@@ -143,7 +178,7 @@ function GamePage(){
                     setWinner(botWinner);
                     setWinningCombo(botWinner.combination);
                     setBoard(botBoard);
-                    //recordResult(botWinner);
+                    await recordResult(botWinner);
                     return;
                 }
 
@@ -168,7 +203,8 @@ function GamePage(){
 
         try {
             const emptyBoard = Array(9).fill("");
-            const response = await axios.post('http://localhost:8080/calculateMove', {board: emptyBoard});
+            const response = await axiosInstance.post('http://localhost:8080/calculateMove', {board: emptyBoard});
+            //const response = await calculateMoveCall({ board: emptyBoard });
             const computerMove = response.data.computerMove;
 
             if (computerMove !== -1){
@@ -182,7 +218,7 @@ function GamePage(){
                     setWinningCombo(botWinner.combination);
                     showMessage(`${botWinner} wins!`);
                     setBoard(newBoard);
-                    //recordResult(botWinner);
+                    await recordResult(botWinner);
                     return; // End the game
                 }
 

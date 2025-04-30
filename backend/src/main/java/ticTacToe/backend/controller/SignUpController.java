@@ -20,14 +20,14 @@ public class SignUpController {
     @Autowired
     private loginService loginService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody PlayerModel player){
-        //if the account exist already
-        if(loginService.accountExist(player.getUserName())){
-            //409
-            return new ResponseEntity(HttpStatus.CONFLICT);
-        }
-        service.storeInfo(player);
-        return new ResponseEntity(HttpStatus.OK);
-    }
+    // @PostMapping("/signup")
+    // public ResponseEntity<String> signUp(@RequestBody PlayerModel player){
+    //     //if the account exist already
+    //     if(loginService.accountExist(player.getUserName())){
+    //         //409
+    //         return new ResponseEntity(HttpStatus.CONFLICT);
+    //     }
+    //     service.storeInfo(player);
+    //     return new ResponseEntity(HttpStatus.OK);
+    // }
 }

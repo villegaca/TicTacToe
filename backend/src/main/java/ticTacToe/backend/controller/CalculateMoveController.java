@@ -1,6 +1,7 @@
 package ticTacToe.backend.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,19 @@ public class CalculateMoveController {
         response.put("computerMove", computerMove);
         
         return ResponseEntity.ok(response);
+
+    //     List<String> boardList = boardRequest.getBoard();
+    // char[] board = new char[boardList.size()];
+
+    // for (int i = 0; i < boardList.size(); i++) {
+    //     String cell = boardList.get(i);
+    //     board[i] = (cell != null && !cell.isEmpty()) ? cell.charAt(0) : ' ';
+    // }
+
+    // int computerMove = minMax.findBestMove(board);
+    // Map<String, Integer> response = new HashMap<>();
+    // response.put("computerMove", computerMove);
+
+    // return ResponseEntity.ok(response);
     }
 }

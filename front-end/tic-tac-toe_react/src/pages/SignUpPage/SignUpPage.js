@@ -2,7 +2,8 @@ import { React, useState } from 'react';
 import LoginTextBox from '../../components/UI/LoginTextBox/LoginTextBox';
 import { useNavigate } from "react-router-dom";
 import './SignUpPage.css';
-import axios from '../../api/AxiosConfig';
+//import axios from '../../api/AxiosConfig';
+import { signupCall } from '../../api/UserServiceFunctions';
 
 function SignUpPage (){
     const signUpMsg = "Sign Up";
@@ -23,15 +24,22 @@ function SignUpPage (){
 
     const handleSignUp = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/signup', formData);
-            console.log('Response: ', response.data);
+            // const response = await axios.post('http://localhost:8080/signup', formData);
+            // console.log('Response: ', response.data);
+            // const token = response.data.token;
+            const data = await signupCall(formData);
+            console.log('Response: ', data);
+            const token = data;
+            localStorage.setItem("token", token);
             setAccountExists(false);
             navigate("/home");
         }catch(error){
-            if(error.response.status === 409){
+            if(error.response && error.response.status === 409){
                 setAccountExists(true); 
+            } else {
+                console.error("Error Signing In: ", error);
             }
-            console.error("Error Signing In: ", error);
+            
         }
     }
 

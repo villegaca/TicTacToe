@@ -1,8 +1,9 @@
-import {React, useState } from 'react';
+import {React, useState, useEffect } from 'react';
 import LoginTextBox from '../../components/UI/LoginTextBox/LoginTextBox';
 import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
-import axios from "../../api/AxiosConfig";
+//import axios from "../../api/AxiosConfig";
+import { loginCall } from '../../api/UserServiceFunctions';
 
 function LoginPage(){
     const welcomeMsg = "Welcome";
@@ -21,23 +22,41 @@ function LoginPage(){
     const navigate = useNavigate();
 
     const loginHandler = async () => {
-        
         try{
-            const response = await axios.post('http://localhost:8080/attemptLogin', loginData);
-            console.log('Response: ', response.data);
+            //const response = await axios.post('http://localhost:8080/attemptLogin', loginData);
+            const data = await loginCall(loginData);
+            console.log(data);
+            //console.log(response.data);
+            //const token = response.data.token;
+            const token = data;
+            localStorage.setItem("token", token);
+            
     
             setError401(false);
             setError404(false);
     
             navigate("/home");
         }catch (error){
-            if(error.response.status === 404){
-                setError404(true);
-                setError401(false);
-            } else if (error.response.status === 401){
-                setError401(true);
-                setError404(false);
+            //if(error.response){
+                if(error.response.status === 404){
+                    setError404(true);
+                    setError401(false);
+                } else if (error.response.status === 401){
+                    setError401(true);
+                    setError404(false);
+                }
+             else {
+                console.error("unexpected error occured", error.message);
             }
+
+        // } else if (error.request) {
+        //     // The request was made but no response was received
+        //     console.log("No response from server");
+        // } else {
+        //     // Something else went wrong
+        //     console.log("Error during request:", error.message);
+        // }
+            
         }
     }
 
@@ -48,6 +67,14 @@ function LoginPage(){
             [name]: value
         }))
     }
+
+    // redirect to home page if authenticated with jwt
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if(token) {
+            navigate("/home");
+        }
+    }, []);
 
     return (
         

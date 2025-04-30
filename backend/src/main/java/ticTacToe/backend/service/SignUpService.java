@@ -13,7 +13,7 @@ public class SignUpService {
     @Autowired
     private PlayerRepo repo;
 
-    public void storeInfo(PlayerModel player){
-        repo.save(player);
-    }
+    // public void storeInfo(PlayerModel player){
+    //     repo.save(player);
+    // }
 }

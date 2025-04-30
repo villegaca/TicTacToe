@@ -14,6 +14,10 @@ public class BoardRequest {
         return result;
     }
 
+    // public List<String> getBoard() {
+    //     return board;
+    // }
+
     public void setBoard(List<String> board) {
         this.board = board;
     }

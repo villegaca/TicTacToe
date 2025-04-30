@@ -4,13 +4,14 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
 import HomePage from './pages/HomePage/HomePage';
 import ChangeUsernamePage from './pages/ChangeUsernamePage/ChangeUsernamePage';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
+          <Route path="/" element={<Navigate to="/logIn" />} /> {/* <- added this */}
           <Route exact path = "/logIn" element = {<LoginPage/>}/>
           <Route path = "/signUP" element = {<SignUpPage/>}/> 
           <Route path = "/home" element = {<HomePage/>}/>
