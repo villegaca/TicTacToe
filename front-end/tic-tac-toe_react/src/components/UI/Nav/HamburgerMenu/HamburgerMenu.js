@@ -3,7 +3,7 @@ import Hamburger from 'hamburger-react';
 import './HamburgerMenu.css';
 import { useNavigate } from 'react-router-dom';
 import DeleteAccountButton from '../../Buttons/DeleteAccountButton/DeleteAccountButton';
-import DeleteAccountModal from '../../Modals/DeleteAccountModal';
+import DeleteAccountModal from '../../Modals/DeleteAccount/DeleteAccountModal';
 import { deleteAccountCall } from '../../../../api/UserServiceFunctions';
 
 function HamburgerMenu(){
@@ -18,10 +18,10 @@ function HamburgerMenu(){
         setPassword(e.target.value);
     }
 
-    //modify this to handle where to go based on what button is clicked
-    const handleClick = () => {
+    const handleClick = (path) => {
         setIsOpen(false);
-        navigate("/changeName");
+        //navigate("/changeName");
+        navigate(`/${path}`);
     }
 
     const handleDeleteClick = async () => {
@@ -69,7 +69,8 @@ function HamburgerMenu(){
 
             {isOpen && (
                 <div className='menu'>
-                    <button className='menu-button' onClick={handleClick}>Change UserName</button>
+                    <button className='menu-button' onClick={() => handleClick("changeName")}>Change UserName</button>
+                    <button className='menu-button' onClick={() => handleClick("changePassword")}>Change Password</button>
                     {/*<button className='menu-button'>Delete Account</button>*/}
                     <DeleteAccountButton onClick={handleDeleteClick}/>
                     <button className='menu-button' onClick = { handleSignOut }>Sign Out</button>

@@ -91,6 +91,11 @@ public class LoginController {
     public ResponseEntity<String> changeUsername(@RequestBody PasswordVerificationRequest username) {
         return service.updateUsername(username.getUsername());
     }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<String> changePassword(@RequestBody PasswordVerificationRequest request) {
+        return service.updatePassword(request.getPassword());
+    }
 }
 
 

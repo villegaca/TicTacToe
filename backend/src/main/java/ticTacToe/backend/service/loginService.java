@@ -139,7 +139,28 @@ public class loginService {
         
     }
 
-    public ResponseEntity<String> deleteAccount(String password){
+    public ResponseEntity<String> updatePassword(String password) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (password == null || password.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("New Username can't be empty");
+        }
+
+        PlayerModel player = repo.findByUserName(username);
+
+        if(player != null) {
+            String encodedPassword = passwordEncoder.encode(password);
+            player.setPassword(encodedPassword);
+            repo.save(player);
+            String newToken = jwtService.generateToken(username);
+
+            return ResponseEntity.ok(newToken);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    }
+
+    public ResponseEntity<String> deleteAccount(String password) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         if(username == null || username.isEmpty()){
