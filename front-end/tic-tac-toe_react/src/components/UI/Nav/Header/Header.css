@@ -21,7 +21,7 @@
 }
 
 .right-container {
-    background-color: #2bbef2;
+    /* background-color: #2bbef2; */
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -29,6 +29,10 @@
     margin-left: auto;
     
 }
+
+/* .hamburger {
+    color: #2bbef2;
+} */
 
 .about-button {
     font-size: 30px;

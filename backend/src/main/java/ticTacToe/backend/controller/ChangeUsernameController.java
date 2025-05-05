@@ -17,8 +17,8 @@ public class ChangeUsernameController {
     @Autowired
     private ChangeNameService service;
 
-    @PostMapping("/changeUsername")
-    public ResponseEntity<String> changeUsername(){
-        return new ResponseEntity(HttpStatus.OK);
-    }
+    // @PostMapping("/changeUsername")
+    // public ResponseEntity<String> changeUsername(){
+    //     return new ResponseEntity(HttpStatus.OK);
+    // }
 }

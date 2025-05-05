@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import ticTacToe.backend.dto.PasswordVerificationRequest;
 import ticTacToe.backend.models.PlayerModel;
 import ticTacToe.backend.service.JWTService;
 import ticTacToe.backend.service.loginService;
@@ -39,18 +40,11 @@ public class LoginController {
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody PlayerModel player){
         return service.storeInfo(player);
-        //if the account exist already
-        // if(loginService.accountExist(player.getUserName())){
-        //     //409
-        //     return new ResponseEntity(HttpStatus.CONFLICT);
-        // }
-        // service.storeInfo(player);
-        // return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteRequest(){
-        return service.deleteAccount();
+    public ResponseEntity<String> deleteRequest(@RequestBody PasswordVerificationRequest request){
+        return service.deleteAccount(request.getPassword());
     }
     // public String verify(@RequestBody PlayerModel user){
     //     Authentication authentication = 
@@ -83,4 +77,20 @@ public class LoginController {
     //     //code is 200 
     //     return new ResponseEntity<>(HttpStatus.OK);
     // }
+
+    @PostMapping("/verifyPassword")
+    public ResponseEntity<String> verifyPassword (@RequestBody PasswordVerificationRequest request){
+        if(service.checkPassword(request.getPassword())){
+            return ResponseEntity.ok("Password is correct");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect Password");
+        }
+    }
+
+    @PostMapping("/changeUsername")
+    public ResponseEntity<String> changeUsername(@RequestBody PasswordVerificationRequest username) {
+        return service.updateUsername(username.getUsername());
+    }
 }
+
+

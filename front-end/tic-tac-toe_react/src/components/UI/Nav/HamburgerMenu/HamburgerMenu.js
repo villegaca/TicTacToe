@@ -9,7 +9,14 @@ import { deleteAccountCall } from '../../../../api/UserServiceFunctions';
 function HamburgerMenu(){
     const [isOpen, setIsOpen] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
     const navigate = useNavigate();
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+    }
 
     //modify this to handle where to go based on what button is clicked
     const handleClick = () => {
@@ -18,6 +25,7 @@ function HamburgerMenu(){
     }
 
     const handleDeleteClick = async () => {
+        setError("");
         setIsOpen(false);
         setShowDeleteModal(true);   
     }
@@ -25,18 +33,23 @@ function HamburgerMenu(){
     const handleConfirmDelete = async () => {
         console.log("acccount deleted");
         try{
-            await deleteAccountCall();
+            await deleteAccountCall(password);
             localStorage.removeItem("token");
             setShowDeleteModal(false);
             navigate("/login");
         } catch (error) {
-            console.error("Error deleting account", error);
-            throw error;
+            if(error.response?.status === 401){
+                setError("Wrong Password");
+            } else {
+                console.error("Error deleting account", error);
+                throw error;
+            }
         }
     };
 
     const handleCancelDelete = () => {
         setShowDeleteModal(false);
+        setError("");
     };
 
     const handleSignOut = () => {
@@ -47,10 +60,11 @@ function HamburgerMenu(){
     return(
         <div className='menu-container'>
             <Hamburger
-                size = {30}
+                size = {40}
                 toggled = { isOpen }
                 toggle = { setIsOpen }
-                color = "#201932"
+                // color = "#201932"
+                color = "#00c3f2"
             />
 
             {isOpen && (
@@ -64,8 +78,11 @@ function HamburgerMenu(){
 
             {showDeleteModal && (
                 <DeleteAccountModal
+                    password = {password}
+                    onPasswordChange={handlePasswordChange}
                     onConfirm = {handleConfirmDelete}
                     onCancel = {handleCancelDelete}
+                    error = {error}
                 />
             )}
 

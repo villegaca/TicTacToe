@@ -7,7 +7,12 @@ import java.util.Optional;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,6 +42,9 @@ public class loginService {
     
     @Autowired
     private PlayerRepo repo;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public ResponseEntity<String> verify(PlayerModel user){
         try {
@@ -97,11 +105,49 @@ public class loginService {
         
     }
 
-    public ResponseEntity<String> deleteAccount(){
+    public ResponseEntity<String> updateUsername(String newUsername){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (newUsername == null || newUsername.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("New Username can't be empty");
+        }
+
+        if (accountExist(newUsername)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username is taken already");
+        }
+         
+        //PlayerModel player = repo.findByUserName(username);
+
+        Query query = new Query(Criteria.where("_id").is(username));
+        Update update = new Update().set("_id", newUsername).set("userName", newUsername);
+
+        PlayerModel player = mongoTemplate.findOne(query, PlayerModel.class);
+
+        
+        if(player != null){
+            player.setUserName(newUsername);
+            mongoTemplate.remove(query, PlayerModel.class);
+            mongoTemplate.save(player);
+            String newToken = jwtService.generateToken(newUsername);
+
+            return ResponseEntity.ok(newToken);
+        }
+            // player.setUserName(newUsername);
+            // repo.save(player);
+            //return ResponseEntity.ok("New Username Saved");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("user not found");
+        
+    }
+
+    public ResponseEntity<String> deleteAccount(String password){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         if(username == null || username.isEmpty()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized request");
+        }
+
+        if(!checkPassword(password)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong Password");
         }
 
         try {
@@ -116,6 +162,19 @@ public class loginService {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting account");
         }
+    }
+
+    public boolean checkPassword(String password){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        PlayerModel player = repo.findByUserName(username);
+
+        if(username.isEmpty()){
+            return false;
+        }
+
+        return encoder.matches(password, player.getPassword());
     }
 
     public boolean accountExist(String username){

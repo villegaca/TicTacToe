@@ -47,16 +47,7 @@ function LoginPage(){
                 }
              else {
                 console.error("unexpected error occured", error.message);
-            }
-
-        // } else if (error.request) {
-        //     // The request was made but no response was received
-        //     console.log("No response from server");
-        // } else {
-        //     // Something else went wrong
-        //     console.log("Error during request:", error.message);
-        // }
-            
+            }      
         }
     }
 
@@ -77,7 +68,6 @@ function LoginPage(){
     }, []);
 
     return (
-        
         <div className = "main">
             <h1 className = "welcome-title">{welcomeMsg}</h1>
 

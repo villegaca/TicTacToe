@@ -3,7 +3,9 @@ import './ChangeUsernamePage.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import LoginTextBox from '../../components/UI/LoginTextBox/LoginTextBox';
 import { useNavigate } from 'react-router-dom';
+import { verifyPasswordCall, changeUsernameCall } from '../../api/UserServiceFunctions';
 import axios from 'axios';
+import axiosInstance from '../../api/AxiosConfig';
 
 const ChangeUsernamePage = () => {
     const triggerPasswordStep = "enterPassword";
@@ -20,7 +22,8 @@ const ChangeUsernamePage = () => {
 
     const handlePasswordSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/verifyPassword', password);
+            const response = await verifyPasswordCall(password);
+            //const response = await axios.post('http://localhost:8080/verifyPassword', password);
             console.log('Response: ', response.data);
 
             setStep(triggerUsernameStep);
@@ -38,15 +41,19 @@ const ChangeUsernamePage = () => {
     const handleUsernameSubmit = async () => {
         //come back and make an update request
         try {
-            const response = await axios.post('http://localhost:8080/changeUsername', userName);
-            setStep(triggerPasswordStep);
+            const response = await changeUsernameCall(userName);
+            //const response = await axios.post('http://localhost:8080/changeUsername', userName);
+            const newToken = response.data;
+            localStorage.setItem("token", newToken);
+            //setStep(triggerPasswordStep);
             setError409(false);
             setSuccessMsg("UserName has been changed. Going back to the home screen");
 
             setTimeout(() => {
                 navigate("/home");
+                setStep(triggerPasswordStep);
                 setSuccessMsg("");
-            }, 5000);
+            }, 3000);
             //navigate("/home");
             // if(userName === "123"){
             //     setStep(triggerPasswordStep);
@@ -80,7 +87,7 @@ const ChangeUsernamePage = () => {
                     /*transition={{duration: 0.5}}*/
                 >
                 <h1>Enter Your Password</h1>
-                <div className="error-message">{ error401 ? errorMsg : ""}</div>
+                {error401 && <div className="error-message">{ errorMsg }</div>}
                 <LoginTextBox
                     type = "password"
                     name = "password"
@@ -102,7 +109,7 @@ const ChangeUsernamePage = () => {
                 >
                 
                 <h1>Enter Your New UserName</h1>
-                <div className="error-message">{ error409 ? accountExists : ""}</div>
+                {error409 && <div className="error-message">{ accountExists }</div>}
                 {successMsg && <div className='success-msg'>{successMsg}</div>}
                 <LoginTextBox
                     type = "text"

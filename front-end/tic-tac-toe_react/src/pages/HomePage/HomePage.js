@@ -2,7 +2,7 @@ import {React, useState, useEffect, useRef} from 'react';
 import './HomePage.css';
 import Header from "../../components/UI/Nav/Header/Header";
 import { useNavigate } from 'react-router-dom';
-import axios from "../../api/AxiosConfig";
+//import axios from "../../api/AxiosConfig";
 import { getWinLossCall } from '../../api/UserServiceFunctions';
 import { jwtDecode } from 'jwt-decode';
 
@@ -73,7 +73,7 @@ function HomePage (){
             <div className= 'win-loss-container'>
                 {/* <div className = 'ratio-container'> */}
                     <p className='ratio-text'> { winLossRatio } </p>
-                    <p className = 'testing1'> {calculateRatio(wins, losses)} </p>
+                    <p className = 'ratio-number'> {calculateRatio(wins, losses)} </p>
 
                     <div className = 'win-loss-numbers-container'>
                         <div className = 'win-number-container'>

@@ -32,3 +32,9 @@
 .submit-button:active {
     opacity: 0.9;
 }
+
+.success-msg {
+    color: #2bbef2;
+    font-weight: bold;
+    margin-top: 10px;
+}
