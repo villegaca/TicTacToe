@@ -26,12 +26,6 @@ public class LoginController {
     @Autowired
     private loginService service;
 
-    // @Autowired
-    // private AuthenticationManager authManager;
-
-    // @Autowired
-    // private JWTService jwtService;
-
     @PostMapping("/attemptLogin")
     public ResponseEntity<String> attemptLogin(@RequestBody PlayerModel playerModel){
         return service.verify(playerModel);
@@ -46,37 +40,6 @@ public class LoginController {
     public ResponseEntity<String> deleteRequest(@RequestBody PasswordVerificationRequest request){
         return service.deleteAccount(request.getPassword());
     }
-    // public String verify(@RequestBody PlayerModel user){
-    //     Authentication authentication = 
-    //         authManager.authenticate(
-    //         new UsernamePasswordAuthenticationToken(
-    //         user.getUserName(), user.getPassword())
-    //     );
-
-    //     if(authentication.isAuthenticated()){
-    //         return jwtService.generateToken(user.getUserName());
-    //     }
-
-    //     return "Failure";
-    // }
-
-    // @PostMapping("/attemptLogin")
-    // public ResponseEntity<String> login(@RequestBody PlayerModel playerModel){
-    //     String userName = playerModel.getUserName();
-    //     String passwordData = playerModel.getPassword();
-
-    //     if (!service.accountExist(userName)){
-    //         // code is 404
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    //     // use code 401 if password is bad
-    //     if(!passwordData.equals(service.getPasswordByUsername(userName))){
-    //         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    //     }
-
-    //     //code is 200 
-    //     return new ResponseEntity<>(HttpStatus.OK);
-    // }
 
     @PostMapping("/verifyPassword")
     public ResponseEntity<String> verifyPassword (@RequestBody PasswordVerificationRequest request){

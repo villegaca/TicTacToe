@@ -88,48 +88,9 @@ function GamePage(){
                     console.log("winner: " + winner);
                     break;      
             }
-
-            // if (winner === playerMark) {
-            //     console.log("Winner is player, posting win.");
-            //     await postWinCall();
-            // } else if (winner === computerMark) {
-            //     console.log("Winner is computer, posting loss.");
-            //     await postLossCall();
-            // } else {
-            //     console.log("No valid winner detected.");
-            // }
         } catch (error) {
             console.error("error recording stat", error);
         }
-
-        // let endPoint = "";
-        // if(winner === playerMark){
-        //     endPoint = 'http://localhost:8080/addWin';
-        // } else {
-        //     endPoint = 'http://localhost:8080/addLoss';
-        // }
-
-        // try {
-        //     await axios.post(endPoint);
-        // }catch(error){
-        //         console.error("error fetching computer move: ", error)
-        //     }
-
-
-        // if(winner === playerMark){
-        //     try{
-        //         await axios.post('http://localhost:8080/addWin');
-        //     }catch(error){
-        //         console.error("error fetching computer move: ", error)
-        //     } 
-        // } else {
-        //     try{
-        //         await axios.post('http://localhost:8080/addLoss');
-        //     }catch(error){
-        //         console.error("error fetching computer move: ", error)
-        //     } 
-            
-        // }
     };
 
     const isBoardFull = (board) => {

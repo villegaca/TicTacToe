@@ -17,32 +17,6 @@ public class GameService {
     @Autowired
     private PlayerRepo repo;
 
-    public ResponseEntity<Map<String, String>> initializeGame(){
-        String playerSymbol = Math.random() < 0.5 ? "X":"O";
-        String botSymbol = playerSymbol.equals("X") ? "O" : "X";
-        String firstTurn = Math.random() < 0.5 ? "player" : "bot";
-
-        return ResponseEntity.ok(Map.of(
-            "playerSymbol", playerSymbol,
-            "botSymbol", botSymbol,
-            "firstTurn", firstTurn
-
-            //if bot goes first, enter turn decision here for the bot
-        ));
-    }
-
-    //min-max
-    public String calculateBestMove(){
-
-        return null;
-    }
-
-    //determine if game over
-    public boolean isGameOver(){
-
-        return false;
-    }
-
     public boolean addWin(){
         String username = getCurrentUsername();
         System.out.println("Authenticated user: " + username);

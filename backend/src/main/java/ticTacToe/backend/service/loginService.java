@@ -73,21 +73,10 @@ public class loginService {
             // unexpected server failure
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("unexpected failure");
         }
-
-        // if(!accountExist(user.getUserName())){
-        //     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account Does Not Exist");
-        // }
-
-        
-
-
-
-        // return "Failure";
     }
 
     public ResponseEntity<String> storeInfo(PlayerModel player){
         String token = "";
-        //Map<String, String> response = new HashMap<>();
 
         if(accountExist(player.getUserName())){
             return ResponseEntity.status(HttpStatus.CONFLICT)
